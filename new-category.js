@@ -27,7 +27,7 @@ $.when(
   };
 
   // Helper function to create a category
-  const createCategory = (span, text) => {
+  const createCategory = (span, text, spanToRemove) => {
     span.off('click').css('cursor', 'wait');
 
     const category = $(span).parent().find('a').text().trim();
@@ -53,6 +53,10 @@ $.when(
 
       const link = $('<a>').attr('href', `/wiki/${res.edit.title}`).text(res.edit.title).attr('target', '_blank').css('margin-left', '0.5rem');
       span.append(link);
+
+      if (spanToRemove) {
+        spanToRemove.remove();
+      }
     });
   };
 
@@ -87,7 +91,7 @@ $.when(
         const spanWI = $('<span>').text('Create WI').css('cursor', 'pointer').css('color', 'darkorange').css('margin-left', '0.5rem');
 
         spanWI.on('click', function() {
-          createCategory(spanWI, '{{WI}}');
+          createCategory(spanWI, '{{WI}}', span);
         });
 
         $(this).append(span, spanWI);
