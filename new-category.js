@@ -94,8 +94,22 @@ $.when(
           createCategory(spanWI, '{{WI}}', span);
         });
 
+        // Add hover effect to underline the entire line
+        span.add(spanWI).on('mouseenter', function() {
+          $(this).parent().css('text-decoration', 'underline');
+        }).on('mouseleave', function() {
+          $(this).parent().css('text-decoration', 'none');
+        });
+
         $(this).append(span, spanWI);
       } else {
+        // Add hover effect for Deleted span too
+        span.on('mouseenter', function() {
+          $(this).parent().css('text-decoration', 'underline');
+        }).on('mouseleave', function() {
+          $(this).parent().css('text-decoration', 'none');
+        });
+
         $(this).append(span);
       }
 
