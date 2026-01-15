@@ -199,7 +199,7 @@ Key npm packages:
 ## GitButler PR Workflow
 
 When creating a pull request with GitButler:
-- Use `but commit -c -b branch-name -m "description"` to create branch and commit
+- Use `but commit -c branch-name -m "description"` to create branch and commit
 - Use `but push <branch-name>` to push to remote
 - Use `but review publish -b <branch-name> -t` to create PR
   - The `-t` flag uses commit message for PR title/description (prevents placeholder content)
