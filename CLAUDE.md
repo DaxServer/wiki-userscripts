@@ -195,3 +195,13 @@ Key npm packages:
 - Add JSDoc comments for complex functions only
 - Avoid nested try-catch blocks - extract to separate functions
 - Use descriptive variable names matching domain concepts (e.g., `api`, `textBox`, `portlet`)
+
+## GitButler PR Workflow
+
+When creating a pull request with GitButler:
+- Use `but commit -c -b branch-name -m "description"` to create branch and commit
+- Use `but push <branch-name>` to push to remote
+- Use `but review publish -b <branch-name> -t` to create PR
+  - The `-t` flag uses commit message for PR title/description (prevents placeholder content)
+- **No PR description needed** - let commit message speak for itself
+- **Always include co-author** - `Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>` in commit message
