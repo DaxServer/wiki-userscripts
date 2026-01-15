@@ -64,37 +64,42 @@ $.when(
       return;
     }
 
-    // Create span elements
-    const span = $('<span>').text('Create').css('cursor', 'pointer').css('color', 'fuchsia').css('margin-left', '0.5rem');
-    const spanWI = $('<span>').text('Create WI').css('cursor', 'pointer').css('color', 'darkorange').css('margin-left', '0.5rem');
-
-    $(this).append(span, spanWI);
-
     const title = `Category:${link.text().trim()}`;
 
-    // Check if the category has been deleted
+    // Check if the category has been deleted before creating UI
     api.get({
       action: 'query',
       list: 'logevents',
       letype: 'delete',
       letitle: title,
     }).then((res) => {
-      if ((res?.query?.logevents || []).length === 0) {
-        return;
+      const isDeleted = (res?.query?.logevents || []).length > 0;
+
+      // Create span elements
+      const span = $('<span>').text('Create').css('cursor', 'pointer').css('color', 'fuchsia').css('margin-left', '0.5rem');
+
+      if (isDeleted) {
+        span.text('Deleted').css('cursor', 'help').css('color', 'maroon');
       }
 
-      span.text('Deleted').css('cursor', 'help').css('color', 'maroon');
-      spanWI.text('Deleted').css('cursor', 'help').css('color', 'maroon');
-    });
+      // Only create WI span if category was not deleted
+      if (!isDeleted) {
+        const spanWI = $('<span>').text('Create WI').css('cursor', 'pointer').css('color', 'darkorange').css('margin-left', '0.5rem');
 
-    // Click handlers
-    span.on('click', function() {
-      const category = $(this).parent().find('a').text().trim();
-      createCategory(span, getCategoryText(category));
-    });
+        spanWI.on('click', function() {
+          createCategory(spanWI, '{{WI}}');
+        });
 
-    spanWI.on('click', function() {
-      createCategory(spanWI, '{{WI}}');
+        $(this).append(span, spanWI);
+      } else {
+        $(this).append(span);
+      }
+
+      // Click handler for main span
+      span.on('click', function() {
+        const category = $(this).parent().find('a').text().trim();
+        createCategory(span, getCategoryText(category));
+      });
     });
   });
 });
