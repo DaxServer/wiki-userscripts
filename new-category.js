@@ -58,6 +58,11 @@ $.when(
 [[Category:Uploaded via Campaign|${matches[1]}]]`;
       }
 
+      const photographerMatches = category.match(/^Photos by (.+) for (Mehr|Tasnim|Moj|Fars) News Agency$/);
+      if (photographerMatches) {
+        text = `{{${photographerMatches[2]} photographer category|${photographerMatches[1]}}}`;
+      }
+
       api.post({
         action: 'edit',
         format: 'json',
