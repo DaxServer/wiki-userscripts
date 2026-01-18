@@ -9,7 +9,9 @@
       "Bash(bun add:*)",
       "Bash(bun pm search:*)",
       "Bash(curl:*)",
-      "Bash(gh run view:*)"
+      "Bash(gh run view:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh pr checks:*)"
     ]
   }
 }

@@ -82,10 +82,7 @@ async function apiPostRequest(params: Record<string, string>, data: Record<strin
     url.searchParams.append(key, value);
   });
 
-  const formData = new URLSearchParams();
-  Object.entries(data).forEach(([key, value]) => {
-    formData.append(key, value);
-  });
+  const formData = new URLSearchParams(data);
 
   const requestData = { url: url.toString(), method: 'POST', data: data };
   const authHeader = oauth.toHeader(oauth.authorize(requestData, token));
