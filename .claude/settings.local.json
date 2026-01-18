@@ -7,7 +7,9 @@
       "WebSearch",
       "Bash(bun remove:*)",
       "Bash(bun add:*)",
-      "Bash(bun pm search:*)"
+      "Bash(bun pm search:*)",
+      "Bash(curl:*)",
+      "Bash(gh run view:*)"
     ]
   }
 }
