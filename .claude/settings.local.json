@@ -1,7 +1,13 @@
 {
   "permissions": {
     "allow": [
-      "Bash(but:*)"
+      "Bash(but:*)",
+      "mcp__plugin_context7_context7__resolve-library-id",
+      "mcp__plugin_context7_context7__query-docs",
+      "WebSearch",
+      "Bash(bun remove:*)",
+      "Bash(bun add:*)",
+      "Bash(bun pm search:*)"
     ]
   }
 }
