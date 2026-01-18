@@ -87,27 +87,28 @@ $.when(
       }
 
       // Only create WI span if category was not deleted
+      let spanWI;
       if (!isDeleted) {
-        const spanWI = $('<span>').text('Create WI').css('cursor', 'pointer').css('color', 'darkorange').css('margin-left', '0.5rem');
+        spanWI = $('<span>').text('Create WI').css('cursor', 'pointer').css('color', 'darkorange').css('margin-left', '0.5rem');
 
         spanWI.on('click', function() {
           createCategory(spanWI, '{{WI}}', span);
         });
 
-        // Add hover effect to underline the entire line
+        // Add hover effect to underline title and respective link
         span.add(spanWI).on('mouseenter', function() {
-          $(this).parent().css('text-decoration', 'underline');
+          $(this).css('text-decoration', 'underline').parent().find('bdi a').css('text-decoration', 'underline');
         }).on('mouseleave', function() {
-          $(this).parent().css('text-decoration', 'none');
+          $(this).css('text-decoration', 'none').parent().find('bdi a').css('text-decoration', 'none');
         });
 
         $(this).append(span, spanWI);
       } else {
         // Add hover effect for Deleted span too
         span.on('mouseenter', function() {
-          $(this).parent().css('text-decoration', 'underline');
+          $(this).css('text-decoration', 'underline').parent().find('bdi a').css('text-decoration', 'underline');
         }).on('mouseleave', function() {
-          $(this).parent().css('text-decoration', 'none');
+          $(this).css('text-decoration', 'none').parent().find('bdi a').css('text-decoration', 'none');
         });
 
         $(this).append(span);
@@ -116,7 +117,7 @@ $.when(
       // Click handler for main span
       span.on('click', function() {
         const category = $(this).parent().find('a').text().trim();
-        createCategory(span, getCategoryText(category));
+        createCategory(span, getCategoryText(category), spanWI);
       });
     });
   });
