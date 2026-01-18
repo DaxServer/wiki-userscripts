@@ -23,6 +23,16 @@ $.when(
       return `{{${photographerMatches[2]} photographer category|${photographerMatches[1]}}}`;
     }
 
+    const lensMatches = category.match(/^Lens focal length (\d+) mm$/);
+    if (lensMatches) {
+      const focalLength = parseInt(lensMatches[1], 10);
+      const padded = String(focalLength).padStart(5, '0');
+      return `{{ImageTOC}}
+{{Hiddencat}}
+
+[[Category:Photographs by lens focal length| ${padded}]]`;
+    }
+
     return '{{subst:unc}}';
   };
 
