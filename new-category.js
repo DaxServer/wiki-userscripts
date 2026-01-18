@@ -26,13 +26,53 @@ $.when(
     return '{{subst:unc}}';
   };
 
-  // Helper function to create a category
-  const createCategory = (span, text, spanToRemove) => {
-    span.off('click').css('cursor', 'wait');
+  // Helper function to update both spans during creation
+  const setCreatingState = (spans) => {
+    spans.forEach(span => {
+      span.off('click mouseenter mouseleave').css({
+        'cursor': 'wait',
+        'text-decoration': 'none'
+      }).text('Creating...');
+    });
+  };
 
-    const category = $(span).parent().find('a').text().trim();
+  // Helper function to set error state
+  const setErrorState = (spans, message) => {
+    spans.forEach(span => {
+      span.off('mouseenter mouseleave').css({
+        'cursor': 'auto',
+        'color': 'tomato'
+      }).text(message);
+    });
+    // Reset underline on bdi a
+    spans[0].parent().find('bdi a').css('text-decoration', 'none');
+  };
+
+  // Helper function to set created state
+  const setCreatedState = (spans, title) => {
+    spans[0].off('mouseenter mouseleave').text('Created').css({
+      'cursor': 'auto',
+      'color': 'inherit'
+    });
+
+    const link = $('<a>').attr('href', `/wiki/${title}`).text(title).attr('target', '_blank').css('margin-left', '0.5rem');
+    spans[0].append(link);
+
+    // Remove the second span if exists
+    if (spans[1]) {
+      spans[1].remove();
+    }
+
+    // Reset underline on bdi a
+    spans[0].parent().find('bdi a').css('text-decoration', 'none');
+  };
+
+  // Helper function to create a category
+  const createCategory = (spans, text) => {
+    setCreatingState(spans);
+
+    const category = spans[0].parent().find('a').text().trim();
     const title = `Category:${category}`;
-    span.text('Creating...');
 
     api.post({
       action: 'edit',
@@ -44,19 +84,22 @@ $.when(
       formatversion: 2,
     }).then((res) => {
       if ('error' in res) {
-        console.log(res);
-        span.text(res.error.info).css('cursor', 'auto').css('color', 'tomato');
+        setErrorState(spans, res.error.info);
         return;
       }
 
-      span.text('Created').css('cursor', 'auto').css('color', 'inherit');
+      setCreatedState(spans, res.edit.title);
+    });
+  };
 
-      const link = $('<a>').attr('href', `/wiki/${res.edit.title}`).text(res.edit.title).attr('target', '_blank').css('margin-left', '0.5rem');
-      span.append(link);
-
-      if (spanToRemove) {
-        spanToRemove.remove();
-      }
+  // Helper function to add hover effect
+  const addHoverEffect = (spans) => {
+    spans.forEach(span => {
+      span.on('mouseenter', function() {
+        $(this).css('text-decoration', 'underline').parent().find('bdi a').css('text-decoration', 'underline');
+      }).on('mouseleave', function() {
+        $(this).css('text-decoration', 'none').parent().find('bdi a').css('text-decoration', 'none');
+      });
     });
   };
 
@@ -78,47 +121,48 @@ $.when(
       letitle: title,
     }).then((res) => {
       const isDeleted = (res?.query?.logevents || []).length > 0;
-
-      // Create span elements
-      const span = $('<span>').text('Create').css('cursor', 'pointer').css('color', 'fuchsia').css('margin-left', '0.5rem');
+      const spans = [];
 
       if (isDeleted) {
-        span.text('Deleted').css('cursor', 'help').css('color', 'maroon');
-      }
-
-      // Only create WI span if category was not deleted
-      let spanWI;
-      if (!isDeleted) {
-        spanWI = $('<span>').text('Create WI').css('cursor', 'pointer').css('color', 'darkorange').css('margin-left', '0.5rem');
-
-        spanWI.on('click', function() {
-          createCategory(spanWI, '{{WI}}', span);
+        const deletedSpan = $('<span>').text('Deleted').css({
+          'cursor': 'help',
+          'color': 'maroon',
+          'margin-left': '0.5rem'
+        });
+        spans.push(deletedSpan);
+        $(this).append(deletedSpan);
+      } else {
+        // Create main span
+        const span = $('<span>').text('Create').css({
+          'cursor': 'pointer',
+          'color': 'fuchsia',
+          'margin-left': '0.5rem'
         });
 
-        // Add hover effect to underline title and respective link
-        span.add(spanWI).on('mouseenter', function() {
-          $(this).css('text-decoration', 'underline').parent().find('bdi a').css('text-decoration', 'underline');
-        }).on('mouseleave', function() {
-          $(this).css('text-decoration', 'none').parent().find('bdi a').css('text-decoration', 'none');
+        // Create WI span
+        const spanWI = $('<span>').text('Create WI').css({
+          'cursor': 'pointer',
+          'color': 'darkorange',
+          'margin-left': '0.5rem'
+        });
+
+        spans.push(span, spanWI);
+
+        // Click handlers
+        span.on('click', function() {
+          const category = $(this).parent().find('a').text().trim();
+          createCategory(spans, getCategoryText(category));
+        });
+
+        spanWI.on('click', function() {
+          createCategory(spans, '{{WI}}');
         });
 
         $(this).append(span, spanWI);
-      } else {
-        // Add hover effect for Deleted span too
-        span.on('mouseenter', function() {
-          $(this).css('text-decoration', 'underline').parent().find('bdi a').css('text-decoration', 'underline');
-        }).on('mouseleave', function() {
-          $(this).css('text-decoration', 'none').parent().find('bdi a').css('text-decoration', 'none');
-        });
-
-        $(this).append(span);
       }
 
-      // Click handler for main span
-      span.on('click', function() {
-        const category = $(this).parent().find('a').text().trim();
-        createCategory(span, getCategoryText(category), spanWI);
-      });
+      // Add hover effect to all spans
+      addHoverEffect(spans);
     });
   });
 });
