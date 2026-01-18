@@ -32,4 +32,4 @@ jobs:
           MW_CONSUMER_SECRET: ${{ secrets.MW_CONSUMER_SECRET }}
           MW_ACCESS_TOKEN: ${{ secrets.MW_ACCESS_TOKEN }}
           MW_ACCESS_SECRET: ${{ secrets.MW_ACCESS_SECRET }}
-        run: bun run scripts/update-commons.ts
+        run: bun scripts/update-commons.ts
