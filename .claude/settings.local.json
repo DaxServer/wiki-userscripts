@@ -11,7 +11,9 @@
       "Bash(curl:*)",
       "Bash(gh run view:*)",
       "Bash(gh pr view:*)",
-      "Bash(gh pr checks:*)"
+      "Bash(gh pr checks:*)",
+      "Bash(bun outdated *)"
     ]
-  }
+  },
+  "spinnerTipsEnabled": false
 }

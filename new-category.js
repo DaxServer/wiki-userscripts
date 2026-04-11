@@ -23,6 +23,13 @@ $.when(
       return `{{${photographerMatches[2]} photographer category|${photographerMatches[1]}}}`;
     }
 
+    const bostonMatches = category.match(/^(\w+) (\d{4}) in Boston$/);
+    if (bostonMatches) {
+      const month = String(new Date(`${bostonMatches[1]} 1`).getMonth() + 1).padStart(2, '0');
+      const year = bostonMatches[2];
+      return `{{MonthbyyearBoston|${year.slice(0, 3)}|${year.slice(3)}|${month}}}`;
+    }
+
     const lensMatches = category.match(/^Lens focal length (\d+) mm$/);
     if (lensMatches) {
       const focalLength = parseInt(lensMatches[1], 10);
