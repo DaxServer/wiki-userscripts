@@ -259,6 +259,18 @@ $.when(
 
       span.on('click', function () {
         migrateTemplate(title, span);
+      }).on('mouseenter', function () {
+        span.css('text-decoration', 'underline');
+        link.css('text-decoration', 'underline');
+      }).on('mouseleave', function () {
+        span.css('text-decoration', 'none');
+        link.css('text-decoration', 'none');
+      });
+
+      link.on('mouseenter', function () {
+        span.css('text-decoration', 'underline');
+      }).on('mouseleave', function () {
+        span.css('text-decoration', 'none');
       });
 
       $(this).append(span);
