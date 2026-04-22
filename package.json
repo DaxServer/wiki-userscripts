@@ -1,24 +1,22 @@
 {
   "dependencies": {
-    "@wikimedia/codex": "^2.4.0",
+    "@wikimedia/codex": "^2.5.0",
     "babel-cli": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "cheerio": "^1.2.0",
-    "cypress": "^15.13.1",
-    "got": "^15.0.1",
+    "got": "^15.0.3",
     "moment": "^2.30.1",
     "oauth-1.0a": "^2.2.6",
     "pending-xhr-puppeteer": "^3.0.0",
     "prompts": "^2.4.2",
-    "puppeteer": "^24.40.0",
-    "vue": "^3.5.32"
+    "vue": "^3.5.33"
   },
   "scripts": {
     "ambati": "babel-node --presets es2015 thehindu.js"
   },
   "type": "module",
   "devDependencies": {
-    "@types/bun": "^1.3.12",
-    "typescript": "^6.0.2"
+    "@types/bun": "^1.3.13",
+    "typescript": "^6.0.3"
   }
 }
