@@ -58,7 +58,7 @@ $.when(
 		? cachereport.timestamp.replace( /(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6' )
 		: '';
 
-	const $box = $( `<details id="newpp-report" style="margin-top:32px;border:var(--border-base);padding:8px 16px;font-size:var(--font-size-medium);">
+	const $box = $( `<details id="newpp-report" style="margin-top:32px;border:1px solid var(--border-color-base);padding:8px 16px;font-size:var(--font-size-medium);">
 		<summary style="cursor:pointer;font-weight:var(--font-weight-bold);">NewPP limit report${cacheTime ? ' — cached ' + cacheTime : ''}</summary>
 		<table style="border-collapse:collapse;margin-top:10px;">
 			${rows.join( '' )}
