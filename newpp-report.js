@@ -2,7 +2,7 @@
 
 $.when(
 	$.ready,
-	mw.loader.using( [ 'mediawiki.util', '@wikimedia/codex-styles' ] )
+	mw.loader.using( [ 'mediawiki.util', '@wikimedia/codex' ] )
 ).then(function () {
 	const report = mw.config.get( 'wgPageParseReport' );
 	if ( !report ) {
