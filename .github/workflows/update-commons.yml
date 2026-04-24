@@ -20,6 +20,12 @@ jobs:
         with:
           fetch-depth: 2
 
+      - name: Get changed files
+        id: changed
+        run: |
+          echo "new_category=$(git diff --name-only HEAD^ HEAD | grep -c '^new-category\.js$' || true)" >> $GITHUB_OUTPUT
+          echo "newpp_report=$(git diff --name-only HEAD^ HEAD | grep -c '^newpp-report\.js$' || true)" >> $GITHUB_OUTPUT
+
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
 
@@ -27,7 +33,7 @@ jobs:
         run: bun install --frozen-lockfile
 
       - name: Deploy new-category.js
-        if: ${{ contains(github.event.commits[0].modified, 'new-category.js') || contains(github.event.commits[0].added, 'new-category.js') }}
+        if: steps.changed.outputs.new_category != '0'
         env:
           MW_CONSUMER_TOKEN: ${{ secrets.MW_CONSUMER_TOKEN }}
           MW_CONSUMER_SECRET: ${{ secrets.MW_CONSUMER_SECRET }}
@@ -36,7 +42,7 @@ jobs:
         run: bun scripts/update-commons.ts new-category.js User:DaxServer/new-category.js
 
       - name: Deploy newpp-report.js
-        if: ${{ contains(github.event.commits[0].modified, 'newpp-report.js') || contains(github.event.commits[0].added, 'newpp-report.js') }}
+        if: steps.changed.outputs.newpp_report != '0'
         env:
           MW_CONSUMER_TOKEN: ${{ secrets.MW_CONSUMER_TOKEN }}
           MW_CONSUMER_SECRET: ${{ secrets.MW_CONSUMER_SECRET }}
