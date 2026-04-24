@@ -29,7 +29,14 @@ interface EditResponse {
 }
 
 const API_BASE = 'https://commons.wikimedia.org/w/api.php';
-const PAGE_TITLE = 'User:DaxServer/new-category.js';
+
+const args = process.argv.slice(2);
+if (!args[0] || !args[1]) {
+  console.error('Usage: update-commons.ts <local-file> <wiki-page-title>');
+  process.exit(1);
+}
+const localFile: string = args[0];
+const pageTitle: string = args[1];
 
 // OAuth credentials from environment variables
 const credentials = {
@@ -123,15 +130,14 @@ async function main(): Promise<void> {
     const csrfToken = tokenResponse.query.tokens.csrftoken;
     console.log('CSRF token obtained');
 
-    // Read the new-category.js file content
-    const content: string = await Bun.file('new-category.js').text();
+    const content: string = await Bun.file(localFile).text();
 
     // Edit the page
     console.log('Updating page on Commons...');
     const editResponse: EditResponse = await apiPostRequest(
       {
         action: 'edit',
-        title: PAGE_TITLE,
+        title: pageTitle,
         format: 'json',
       },
       {
