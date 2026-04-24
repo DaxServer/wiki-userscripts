@@ -26,7 +26,7 @@ $.when(
 		const fVal = fmt( value );
 		const fLim = limit !== undefined ? fmt( limit ) : null;
 		const over = overLimit( value, limit );
-		const style = over ? 'color:var(--color-destructive);font-weight:var(--font-weight-bold);' : '';
+		const style = over ? 'color:var(--color-destructive);font-weight:bold;' : '';
 		const limitCell = fLim !== null ? `<td style="padding:1px 8px;${style}">${fVal} / ${fLim}</td>` : `<td style="padding:1px 8px;">${fVal}</td>`;
 		return `<tr><td style="padding:1px 8px;color:var(--color-subtle);">${label}</td>${limitCell}${over ? '<td style="color:var(--color-destructive);">⚠ over limit</td>' : '<td></td>'}</tr>`;
 	}
@@ -51,7 +51,7 @@ $.when(
 	}
 
 	const timingRows = ( limitreport.timingprofile || [] )
-		.map( ( line ) => `<tr><td colspan="3" style="padding:1px 8px;font-family:var(--font-family-monospace);white-space:pre;">${mw.html.escape( line )}</td></tr>` )
+		.map( ( line ) => `<tr><td colspan="3" style="padding:1px 8px;font-family:monospace;white-space:pre;">${mw.html.escape( line )}</td></tr>` )
 		.join( '' );
 
 	const cacheTime = cachereport && cachereport.timestamp
@@ -59,10 +59,10 @@ $.when(
 		: '';
 
 	const $box = $( `<details id="newpp-report" style="margin-top:32px;border:1px solid var(--border-color-base);padding:8px 16px;font-size:var(--font-size-medium);">
-		<summary style="cursor:pointer;font-weight:var(--font-weight-bold);">NewPP limit report${cacheTime ? ' — cached ' + cacheTime : ''}</summary>
+		<summary style="cursor:pointer;font-weight:bold;">NewPP limit report${cacheTime ? ' — cached ' + cacheTime : ''}</summary>
 		<table style="border-collapse:collapse;margin-top:10px;">
 			${rows.join( '' )}
-			${timingRows ? '<tr><td colspan="3" style="padding-top:10px;font-weight:var(--font-weight-bold);">Timing profile</td></tr>' + timingRows : ''}
+			${timingRows ? '<tr><td colspan="3" style="padding-top:10px;font-weight:bold;">Timing profile</td></tr>' + timingRows : ''}
 		</table>
 	</details>` );
 
