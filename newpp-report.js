@@ -26,9 +26,9 @@ $.when(
 		const fVal = fmt( value );
 		const fLim = limit !== undefined ? fmt( limit ) : null;
 		const over = overLimit( value, limit );
-		const style = over ? 'color:#d33;font-weight:bold;' : '';
+		const style = over ? 'color:var(--color-destructive);font-weight:var(--font-weight-bold);' : '';
 		const limitCell = fLim !== null ? `<td style="padding:1px 8px;${style}">${fVal} / ${fLim}</td>` : `<td style="padding:1px 8px;">${fVal}</td>`;
-		return `<tr><td style="padding:1px 8px;color:#54595d;">${label}</td>${limitCell}${over ? '<td style="color:#d33;">⚠ over limit</td>' : '<td></td>'}</tr>`;
+		return `<tr><td style="padding:1px 8px;color:var(--color-subtle);">${label}</td>${limitCell}${over ? '<td style="color:var(--color-destructive);">⚠ over limit</td>' : '<td></td>'}</tr>`;
 	}
 
 	const rows = [
@@ -51,22 +51,22 @@ $.when(
 	}
 
 	const timingRows = ( limitreport.timingprofile || [] )
-		.map( ( line ) => `<tr><td colspan="3" style="padding:1px 8px;font-family:monospace;white-space:pre;">${mw.html.escape( line )}</td></tr>` )
+		.map( ( line ) => `<tr><td colspan="3" style="padding:1px 8px;font-family:var(--font-family-monospace);white-space:pre;">${mw.html.escape( line )}</td></tr>` )
 		.join( '' );
 
 	const cacheTime = cachereport && cachereport.timestamp
 		? cachereport.timestamp.replace( /(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6' )
 		: '';
 
-	const $box = $( `<details id="newpp-report" style="margin-top:2em;border:1px solid #a2a9b1;padding:0.5em 1em;font-size:0.85em;">
-		<summary style="cursor:pointer;font-weight:bold;">NewPP limit report${cacheTime ? ' — cached ' + cacheTime : ''}</summary>
+	const $box = $( `<details id="newpp-report" style="margin-top:2em;border:var(--border-width-base) var(--border-style-base) var(--border-color-base);padding:0.5em 1em;font-size:0.85em;">
+		<summary style="cursor:pointer;font-weight:var(--font-weight-bold);">NewPP limit report${cacheTime ? ' — cached ' + cacheTime : ''}</summary>
 		<table style="border-collapse:collapse;margin-top:0.6em;">
 			${rows.join( '' )}
-			${timingRows ? '<tr><td colspan="3" style="padding-top:0.6em;font-weight:bold;">Timing profile</td></tr>' + timingRows : ''}
+			${timingRows ? '<tr><td colspan="3" style="padding-top:0.6em;font-weight:var(--font-weight-bold);">Timing profile</td></tr>' + timingRows : ''}
 		</table>
 	</details>` );
 
-	$( mw.util.$content ).append( $box );
+	$( '#mw-content-text .mw-parser-output' ).append( $box );
 } );
 
 // </nowiki>
