@@ -66,7 +66,7 @@ $.when(
 		</table>
 	</details>` );
 
-	mw.util.$content.append( $box );
+	$( mw.util.$content ).append( $box );
 } );
 
 // </nowiki>
