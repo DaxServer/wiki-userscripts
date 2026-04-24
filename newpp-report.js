@@ -66,7 +66,7 @@ $.when(
 		</table>
 	</details>` );
 
-	$( '#content' ).append( $box );
+	$( '#bodyContent' ).append( $box );
 } );
 
 // </nowiki>
