@@ -166,6 +166,10 @@ mw.hook('ve.saveDialog.stateChanged').add(() => {
 - `thehindu.js` - Node.js script for scraping news articles (uses Cheerio, got, moment)
 - `cbfc.js` - Puppeteer script for scraping film certification data
 
+## Deploying Scripts to Commons
+
+`bun scripts/update-commons.ts <local-file> <wiki-page-title>` — deploys a local JS file to a Commons user page via OAuth. The GitHub Actions workflow (`.github/workflows/update-commons.yml`) runs this automatically on push to `main` when tracked files change. Add new files to the `paths` trigger and a corresponding deploy step.
+
 ## Testing
 
 Cypress is available for end-to-end testing. Test configuration is in `cypress.json` (currently empty). Run tests with:
@@ -185,9 +189,32 @@ Key npm packages:
 - `moment` - Date/time manipulation
 - `prompts` - Interactive CLI prompts
 
+## Lua Module Development
+
+### Fetching Commons/MediaWiki docs
+
+- `bun scripts/fetch-mediawiki-doc.ts <url> [search-term]` — fetch via markdown.new (cleaner than raw HTML)
+- `bun scripts/fetch-mediawiki-doc.ts --raw https://commons.wikimedia.org "Module:Name" [search-term]` — fetch raw Lua source via MediaWiki API
+
+### Template performance
+
+- `#ifexist` is an expensive parser function (database hit per call, 100-call limit per page). Prefer Lua data tables over `#ifexist` chains in templates.
+
+### Module patterns
+
+- `mw.loadData` for pure data tables (i18n, lookups); `require` for modules with functions
+- Many Commons modules export `_functionName` APIs for Lua-to-Lua calls (no frame needed):
+  - `Module:List` → `List.makeList('horizontal', items)`
+  - `Module:ISOdate` → `ISOdate._ISOdate(dateStr, lang)`
+  - `Module:City` → `City._city(place, lang, link)`
+  - `Module:Countries` → `Countries._main(options, require('Module:Countries/' .. continent))`
+    - options: `{prefix, suffix, presep, sufsep, lang, nocat}`
+- `mw.language.getFallbacksFor(lang)` for proper i18n fallback chains (not just direct `bucket['en']`)
+- `mw.ustring.gsub` not `string.gsub` for Unicode-safe substitutions
+
 ## Code Conventions
 
-- All userscripts start with `// <nowiki>` comment wrapper
+- All userscripts wrap content with `// <nowiki>` at top and `// </nowiki>` at bottom
 - Use ES6+ features (arrow functions, const/let, template literals)
 - Use strict equality (`===`, `!==`)
 - Indent with tabs (existing code convention)

@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'new-category.js'
+      - 'newpp-report.js'
 
 permissions:
   contents: read
@@ -16,6 +17,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 2
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
@@ -23,10 +26,20 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: Update Commons page
+      - name: Deploy new-category.js
+        if: ${{ contains(github.event.commits[0].modified, 'new-category.js') || contains(github.event.commits[0].added, 'new-category.js') }}
         env:
           MW_CONSUMER_TOKEN: ${{ secrets.MW_CONSUMER_TOKEN }}
           MW_CONSUMER_SECRET: ${{ secrets.MW_CONSUMER_SECRET }}
           MW_ACCESS_TOKEN: ${{ secrets.MW_ACCESS_TOKEN }}
           MW_ACCESS_SECRET: ${{ secrets.MW_ACCESS_SECRET }}
-        run: bun scripts/update-commons.ts
+        run: bun scripts/update-commons.ts new-category.js User:DaxServer/new-category.js
+
+      - name: Deploy newpp-report.js
+        if: ${{ contains(github.event.commits[0].modified, 'newpp-report.js') || contains(github.event.commits[0].added, 'newpp-report.js') }}
+        env:
+          MW_CONSUMER_TOKEN: ${{ secrets.MW_CONSUMER_TOKEN }}
+          MW_CONSUMER_SECRET: ${{ secrets.MW_CONSUMER_SECRET }}
+          MW_ACCESS_TOKEN: ${{ secrets.MW_ACCESS_TOKEN }}
+          MW_ACCESS_SECRET: ${{ secrets.MW_ACCESS_SECRET }}
+        run: bun scripts/update-commons.ts newpp-report.js User:DaxServer/newpp-report.js
